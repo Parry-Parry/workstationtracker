@@ -19,8 +19,8 @@ def main(cfg: str):
 
     # Create a "logs" folder if it doesn't exist in the repository
     logs_folder_name = 'logs'
-    if not any(x.path == logs_folder_name for x in repo.get_contents('')):
-        repo.create_file(logs_folder_name, "Create logs folder", "", branch="main")
+    #if not any(x.path == logs_folder_name for x in repo.get_contents('')):
+     #   repo.create_file(logs_folder_name, "Create logs folder", "", branch="main")
     
     file_name = f'{logs_folder_name}/{system_id}.log'
 
