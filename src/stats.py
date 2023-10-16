@@ -1,5 +1,5 @@
 import os
-from github import Github
+from github import Github, GithubException
 from fire import Fire
 from yaml import load
 from datetime import datetime
@@ -40,11 +40,19 @@ def main(cfg: str):
     log_text = "\n".join(log_content)
 
     # Read the existing log file if it exists
-    if repo.get_contents(file_name, ref="main"):
+    try:
         content = repo.get_contents(file_name, ref="main")
         existing_log = content.decoded_content.decode('utf-8')
-    else:
-        existing_log = ""
+    except GithubException as e:
+        # Handle the case where the file doesn't exist
+        if e.status == 404:
+            existing_log = ""
+            # Create an empty file
+            repo.create_file(file_name, "Initial Commit", "", branch="main")
+        else:
+            # Handle other GitHub exceptions
+            print(f"GitHub Error: {e}")
+            existing_log = ""
 
     # Calculate the maximum number of lines based on the number of GPUs
     max_lines = 10000 * num_gpus
