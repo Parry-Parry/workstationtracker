@@ -49,10 +49,12 @@ def main(cfg: str):
             existing_log = ""
             # Create an empty file
             repo.create_file(file_name, "Initial Commit", "", branch="main")
+            content = repo.get_contents(file_name, ref="main")
         else:
             # Handle other GitHub exceptions
             print(f"GitHub Error: {e}")
             existing_log = ""
+            content = None
 
     # Calculate the maximum number of lines based on the number of GPUs
     max_lines = 10000 * num_gpus
